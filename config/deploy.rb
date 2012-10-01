@@ -1,20 +1,22 @@
-$:.unshift(File.expand_path('./lib', ENV['rvm_path'])) # Add RVM's lib directory to the load path.
+#$:.unshift(File.expand_path('./lib', ENV['rvm_path'])) # Add RVM's lib directory to the load path.
 require 'rvm/capistrano'  # Add RVM integration
 require 'bundler/capistrano'  # Add Bundler integration
 load 'deploy/assets'  # only for rails 3.1 apps, this makes sure our assets are precompiled.
-
+set :rvm_type, :system
 set :application, "fresh"
+ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh", "fresh.pem")]
 role :web, "54.247.82.104"  # Your HTTP server, Apache/etc
 role :app, "54.247.82.104"  # This may be the same as your `Web` server
 role :db,  "54.247.82.104", :primary => true  # This is where Rails migrations will run
 
 set :scm, :git
-set :repository, "git@github.com:HectorMalot/WebL.git"
+set :repository, "https://github.com/BlackZero/fresh.git"
 set :branch, "master"
 
-set :user, "deploy"
+set :user, "ubuntu"
 set :deploy_to, "/var/www/#{application}"
 set :deploy_via, :remote_cache
+set :sudo_prompt, ""
 set :use_sudo, false
 #set :application, "set your application name here"
 #set :repository,  "set your repository location here"
